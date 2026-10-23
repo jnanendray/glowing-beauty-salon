@@ -9,6 +9,10 @@ import { createClient } from "@/lib/supabase/client";
  * session state first: signed out → /login (remembering /book as
  * where to return to once signed in); signed in → straight to the
  * booking page, with the service preselected when one is given.
+ *
+ * The salon owner/staff (admins) don't book for themselves — for them
+ * the same button becomes "View bookings" and opens the admin
+ * calendar instead.
  */
 export default function BookButton({
   className,
@@ -23,18 +27,47 @@ export default function BookButton({
   children?: React.ReactNode;
 }) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
+    let cancelled = false;
 
-    supabase.auth.getUser().then(({ data }) => setSignedIn(!!data.user));
+    function checkAdmin(hasUser: boolean) {
+      if (!hasUser) {
+        setIsAdmin(false);
+        return;
+      }
+      supabase.rpc("is_admin").then(({ data }) => {
+        if (!cancelled) setIsAdmin(data === true);
+      });
+    }
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSignedIn(!!session?.user);
+    supabase.auth.getUser().then(({ data }) => {
+      const hasUser = !!data.user;
+      setSignedIn(hasUser);
+      checkAdmin(hasUser);
     });
 
-    return () => listener.subscription.unsubscribe();
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      const hasUser = !!session?.user;
+      setSignedIn(hasUser);
+      checkAdmin(hasUser);
+    });
+
+    return () => {
+      cancelled = true;
+      listener.subscription.unsubscribe();
+    };
   }, []);
+
+  if (isAdmin) {
+    return (
+      <Link href="/admin/bookings?view=month" onClick={onNavigate} className={className}>
+        View bookings
+      </Link>
+    );
+  }
 
   const bookPath = presetService ? `/book?service=${encodeURIComponent(presetService)}` : "/book";
   const href = signedIn ? bookPath : `/login?next=${encodeURIComponent(bookPath)}`;

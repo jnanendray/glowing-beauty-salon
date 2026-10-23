@@ -20,6 +20,26 @@ export function addDays(key: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
+/** First day of the month containing `key`. */
+export function monthStart(key: string): string {
+  return `${key.slice(0, 7)}-01`;
+}
+
+/** First day of the month `n` months after the one containing `key`. */
+export function addMonths(key: string, n: number): string {
+  const d = new Date(`${monthStart(key)}T00:00:00Z`);
+  d.setUTCMonth(d.getUTCMonth() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+export function formatMonth(key: string): string {
+  return new Date(`${key}T00:00:00Z`).toLocaleDateString("en-IN", {
+    timeZone: "UTC",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 /** Monday of the week containing `key`. */
 export function weekStart(key: string): string {
   const d = new Date(`${key}T00:00:00Z`);

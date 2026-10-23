@@ -27,6 +27,10 @@ export default async function BookPage({
     redirect(`/login?next=${encodeURIComponent(next)}`);
   }
 
+  // Salon staff manage bookings rather than make them.
+  const { data: isAdmin } = await supabase.rpc("is_admin");
+  if (isAdmin === true) redirect("/admin/bookings?view=month");
+
   return (
     <>
       <Header />
