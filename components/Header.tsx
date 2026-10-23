@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Container from "@/components/Container";
+import AuthButton from "@/components/AuthButton";
+import BookButton from "@/components/BookButton";
 
 const navLinks = [
   { href: "#services", label: "Services" },
@@ -37,12 +39,10 @@ export default function Header() {
           ))}
         </nav>
 
-        <a
-          href="#booking"
-          className="font-body hidden rounded-full bg-[#b8765f] px-5 py-2.5 text-sm font-semibold text-[#fdf5f1] hover:bg-[#c48670] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a241f] md:inline-block"
-        >
-          Book an appointment
-        </a>
+        <div className="hidden items-center gap-5 md:flex">
+          <AuthButton variant="desktop" />
+          <BookButton className="font-body rounded-full bg-[#b8765f] px-5 py-2.5 text-sm font-semibold text-[#fdf5f1] hover:bg-[#c48670] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a241f]" />
+        </div>
 
         <button
           type="button"
@@ -76,13 +76,13 @@ export default function Header() {
                 {link.label}
               </a>
             ))}
-            <a
-              href="#booking"
-              onClick={() => setOpen(false)}
+            <div onClick={() => setOpen(false)}>
+              <AuthButton variant="mobile" />
+            </div>
+            <BookButton
+              onNavigate={() => setOpen(false)}
               className="font-body mt-2 rounded-full bg-[#b8765f] px-5 py-2.5 text-center text-sm font-semibold text-[#fdf5f1]"
-            >
-              Book an appointment
-            </a>
+            />
           </Container>
         </div>
       )}
