@@ -93,6 +93,9 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
 
   const [customerId, setCustomerId] = useState<string | null>(null);
   const [customerLoading, setCustomerLoading] = useState(true);
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [reminderConsent, setReminderConsent] = useState(false);
 
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [locationType, setLocationType] = useState<LocationType>("salon");
@@ -150,11 +153,22 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
       }
       supabase
         .from("customers")
-        .select("id")
+        .select("id, full_name, phone, marketing_consent")
         .eq("auth_user_id", user.id)
         .maybeSingle()
         .then(({ data: customerRow }) => {
-          setCustomerId(customerRow ? (customerRow as { id: string }).id : null);
+          const row = customerRow as {
+            id: string;
+            full_name: string | null;
+            phone: string | null;
+            marketing_consent: boolean;
+          } | null;
+          setCustomerId(row ? row.id : null);
+          if (row) {
+            setCustomerName(row.full_name ?? "");
+            setCustomerPhone(row.phone ?? "");
+            setReminderConsent(row.marketing_consent);
+          }
           setCustomerLoading(false);
         });
     });
@@ -291,10 +305,37 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
       setSubmitError("Please add your address and area for an at-home appointment.");
       return;
     }
+    const trimmedName = customerName.trim();
+    const phoneDigits = customerPhone.replace(/\D/g, "");
+    if (!trimmedName) {
+      setSubmitError("Please add your name so we know who to expect.");
+      return;
+    }
+    if (phoneDigits.length < 10) {
+      setSubmitError("Please add a valid phone number so the salon can reach you.");
+      return;
+    }
 
     setSubmitting(true);
     setSubmitError(null);
     const supabase = createClient();
+
+    // Save contact details on the customer's profile (RLS lets a
+    // customer update only their own row).
+    const { error: profileError } = await supabase
+      .from("customers")
+      .update({
+        full_name: trimmedName,
+        phone: customerPhone.trim(),
+        marketing_consent: reminderConsent,
+      })
+      .eq("id", customerId);
+
+    if (profileError) {
+      setSubmitting(false);
+      setSubmitError(profileError.message);
+      return;
+    }
 
     const { error } = await supabase.from("bookings").insert({
       customer_id: customerId,
@@ -581,6 +622,45 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
               <Row label="Time" value={formatClock(selectedSlot.startTime)} />
               <Row label="Total" value={totalPrice !== null ? `₹${totalPrice.toLocaleString("en-IN")}` : "—"} />
             </dl>
+
+            <div className="mt-5 grid gap-3 md:grid-cols-2">
+              <label className="font-body flex flex-col gap-1 text-xs font-medium text-[#5c4038]">
+                Your name
+                <input
+                  type="text"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  autoComplete="name"
+                  placeholder="Full name"
+                  className="rounded-2xl border border-[#3a241f]/15 bg-white px-4 py-2.5 text-sm font-normal text-[#3a241f] outline-none focus-visible:border-[#b8765f]"
+                />
+              </label>
+              <label className="font-body flex flex-col gap-1 text-xs font-medium text-[#5c4038]">
+                Phone number
+                <input
+                  type="tel"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  autoComplete="tel"
+                  inputMode="tel"
+                  placeholder="10-digit mobile number"
+                  className="rounded-2xl border border-[#3a241f]/15 bg-white px-4 py-2.5 text-sm font-normal text-[#3a241f] outline-none focus-visible:border-[#b8765f]"
+                />
+              </label>
+            </div>
+
+            <label className="font-body mt-3 flex items-start gap-2 text-xs text-[#5c4038]">
+              <input
+                type="checkbox"
+                checked={reminderConsent}
+                onChange={(e) => setReminderConsent(e.target.checked)}
+                className="mt-0.5 accent-[#b8765f]"
+              />
+              <span>
+                Send me a friendly reminder when I&rsquo;m due for my next visit (WhatsApp or email). You can
+                opt out anytime.
+              </span>
+            </label>
 
             <textarea
               value={notes}
