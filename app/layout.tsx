@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import ChatWidget from "@/components/ChatWidget";
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
+// Fonts are bundled with the site (app/fonts) instead of fetched from
+// Google Fonts during every build, so a Google hiccup can't break a
+// deploy. Both are open-source (SIL Open Font License, included).
+const playfair = localFont({
+  src: [
+    { path: "./fonts/playfair-display.woff", weight: "400 900", style: "normal" },
+    { path: "./fonts/playfair-display-italic.woff", weight: "400 900", style: "italic" },
+  ],
   variable: "--font-playfair",
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const inter = localFont({
+  src: [{ path: "./fonts/inter.woff", weight: "100 900", style: "normal" }],
   variable: "--font-inter",
   display: "swap",
 });
