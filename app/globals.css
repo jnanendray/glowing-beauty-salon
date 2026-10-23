@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+.font-display {
+  font-family: var(--font-playfair), serif;
+}
+
+.font-body {
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Soft blush/ivory hero panel — warm, airy, not a flat block of white. */
+.blush-field {
+  position: relative;
+  background-color: #fdf5f1;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 85% 0%, rgba(199, 122, 101, 0.16), transparent 60%),
+    radial-gradient(ellipse 60% 55% at 5% 100%, rgba(241, 194, 177, 0.35), transparent 65%);
+}
+
+/* Deep rose-bronze panel used for the admin/footer and contrast sections. */
+.espresso-field {
+  position: relative;
+  background-color: #3a241f;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 90% 0%, rgba(216, 150, 128, 0.18), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 0% 100%, rgba(255, 255, 255, 0.04), transparent 65%);
+}
+
+.petal-field {
+  background-image: radial-gradient(circle, rgba(183, 110, 101, 0.18) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+}
+
+/* Rose-gold photo-textured wordmark — same technique as the Jyothi
+   Metal Artifacts copper wordmark, swapped to a rose-gold brushed-metal
+   texture and warmed drop-shadow extrusion for depth. */
+.wordmark-wrap {
+  position: relative;
+  display: inline-block;
+  filter: drop-shadow(0 10px 14px rgba(58, 36, 31, 0.22));
+}
+
+.wordmark-line {
+  position: relative;
+  margin: 0;
+  line-height: 1.04;
+  display: flex;
+  align-items: center;
+  gap: 0.16em;
+}
+
+.wordmark-textstack {
+  position: relative;
+  display: inline-block;
+}
+
+.wordmark-extrude {
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  text-shadow:
+    1px 1px 0 #caa08f,
+    2px 2px 0 #c0937f,
+    3px 3px 0 #b68670,
+    4px 4px 6px rgba(58, 36, 31, 0.28);
+}
+
+.wordmark-fill {
+  position: relative;
+  background-image: url("/brand/rose-gold-texture.jpg");
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.fill-primary {
+  background-size: 240% 520%;
+  background-position: 15% 25%;
+}
+
+.fill-secondary {
+  background-size: 200% 760%;
+  background-position: 55% 55%;
+}
+
+.wordmark-icon {
+  flex-shrink: 0;
+  filter: drop-shadow(1px 2px 1px rgba(58, 36, 31, 0.25));
+}
+
+.badge-tick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Native <details>/<summary> FAQ / disabled-option notes: rotate the
+   marker, no JS needed. */
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary {
+  list-style: none;
+}
+
+.faq-item .faq-chevron {
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+/* Greyed-out, disabled sign-in options (Phone OTP / WhatsApp OTP) —
+   visibly present, visibly inert. Never attach a click handler to
+   elements using this class. */
+.disabled-option {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: grayscale(55%);
+}
