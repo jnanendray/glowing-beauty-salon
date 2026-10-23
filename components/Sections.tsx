@@ -56,12 +56,8 @@ export function Hero() {
     <section id="top" className="blush-field">
       <Container className="grid gap-10 py-16 md:py-24 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div>
-          <span className="font-body inline-flex items-center gap-1.5 rounded-full border border-[#c99a8a]/50 bg-white/60 px-3.5 py-1.5 text-xs font-semibold text-[#9a5a46]">
-            ✦ Now booking in your city
-          </span>
-
-          <div className="wordmark-wrap mt-5">
-            <p className="wordmark-line font-display text-[2.8rem] italic font-semibold leading-none sm:text-[3.6rem] md:text-[4.6rem]">
+          <div className="wordmark-wrap">
+            <p className="wordmark-line font-display text-[3.4rem] italic font-semibold leading-none sm:text-[4.4rem] md:text-[5.6rem]">
               <span className="wordmark-textstack">
                 <span className="wordmark-extrude">Glowing</span>
                 <span className="wordmark-fill fill-primary">Glowing</span>
@@ -81,7 +77,7 @@ export function Hero() {
                 <circle cx="32" cy="32" r="6.5" fill="#f4cc85" stroke="#b8765f" strokeWidth="1.6" />
               </svg>
             </p>
-            <p className="wordmark-line font-display mt-2 text-[1.7rem] font-semibold uppercase leading-none tracking-[0.2em] sm:text-[2.1rem] md:text-[2.6rem]">
+            <p className="wordmark-line font-display mt-2 text-[2rem] font-semibold uppercase leading-none tracking-[0.2em] sm:text-[2.5rem] md:text-[3.1rem]">
               <span className="wordmark-textstack">
                 <span className="wordmark-extrude">Beauty Salon</span>
                 <span className="wordmark-fill fill-secondary">Beauty Salon</span>
@@ -121,7 +117,7 @@ export function Hero() {
             <div className="aspect-[3/4] overflow-hidden rounded-[28px] bg-[#f1d9cf] shadow-[0_18px_40px_rgba(58,36,31,0.12)]">
               <Image
                 src="/hero/hero-1.jpg"
-                alt="Stylist styling a client's hair at Glowing Beauty Salon"
+                alt="Elegant braided bridal updo with baby's breath flowers at Glowing Beauty Salon"
                 width={480}
                 height={640}
                 className="h-full w-full object-cover"

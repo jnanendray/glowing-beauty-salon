@@ -8,13 +8,54 @@
   font-family: var(--font-inter), sans-serif;
 }
 
-/* Soft blush/ivory hero panel — warm, airy, not a flat block of white. */
+/* Soft blush/ivory hero panel — warm, airy, not a flat block of white.
+   The two glows drift slowly so the panel feels alive without being
+   distracting; respects reduced-motion preferences. */
 .blush-field {
   position: relative;
+  overflow: hidden;
   background-color: #fdf5f1;
-  background-image:
-    radial-gradient(ellipse 70% 60% at 85% 0%, rgba(199, 122, 101, 0.16), transparent 60%),
-    radial-gradient(ellipse 60% 55% at 5% 100%, rgba(241, 194, 177, 0.35), transparent 65%);
+}
+
+.blush-field::before,
+.blush-field::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.blush-field::before {
+  background-image: radial-gradient(ellipse 70% 60% at 85% 0%, rgba(199, 122, 101, 0.2), transparent 60%);
+  animation: blush-drift-1 22s ease-in-out infinite;
+}
+
+.blush-field::after {
+  background-image: radial-gradient(ellipse 60% 55% at 5% 100%, rgba(241, 194, 177, 0.4), transparent 65%);
+  animation: blush-drift-2 26s ease-in-out infinite;
+}
+
+.blush-field > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes blush-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-4%, 3%) scale(1.08); }
+}
+
+@keyframes blush-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(3%, -4%) scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blush-field::before,
+  .blush-field::after {
+    animation: none;
+  }
 }
 
 /* Deep rose-bronze panel used for the admin/footer and contrast sections. */
