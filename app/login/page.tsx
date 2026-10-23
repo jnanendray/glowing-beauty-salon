@@ -8,7 +8,13 @@ export const metadata: Metadata = {
   description: "Sign in with Google or email to book and manage your appointments at Glowing Beauty Salon.",
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const { next } = await searchParams;
+
   return (
     <main className="blush-field flex min-h-screen items-center justify-center py-16">
       <Container className="flex flex-col items-center">
@@ -21,7 +27,7 @@ export default function LoginPage() {
           <p className="font-body mb-6 text-sm text-[#5c4038]">
             Sign in to book an appointment, see your bookings and chat with us.
           </p>
-          <LoginForm />
+          <LoginForm next={next || "/"} />
         </div>
 
         <p className="font-body mt-6 max-w-[420px] text-center text-xs text-[#8a6b61]">

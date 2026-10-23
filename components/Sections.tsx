@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Container from "@/components/Container";
+import BookButton from "@/components/BookButton";
 
 export const services = [
   {
@@ -91,12 +92,7 @@ export function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3.5">
-            <a
-              href="#booking"
-              className="font-body rounded-full bg-[#b8765f] px-6 py-3.5 text-center text-sm font-semibold text-[#fdf5f1] hover:bg-[#c48670] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a241f]"
-            >
-              Book an appointment
-            </a>
+            <BookButton className="font-body rounded-full bg-[#b8765f] px-6 py-3.5 text-center text-sm font-semibold text-[#fdf5f1] hover:bg-[#c48670] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a241f]" />
             <a
               href="#services"
               className="font-body rounded-full border border-[#c99a8a] px-6 py-3.5 text-center text-sm font-semibold text-[#3a241f] hover:bg-white/50"
@@ -195,12 +191,9 @@ export function Services() {
                 <p className="font-body mt-2 text-sm leading-relaxed text-[#6b4c42]">
                   {s.desc}
                 </p>
-                <a
-                  href="#booking"
-                  className="font-body mt-4 inline-block text-sm font-semibold text-[#b8765f] hover:text-[#9a5a46]"
-                >
+                <BookButton className="font-body mt-4 inline-block text-sm font-semibold text-[#b8765f] hover:text-[#9a5a46]">
                   Book this service →
-                </a>
+                </BookButton>
               </div>
             </div>
           ))}
@@ -310,12 +303,7 @@ export function TrustCta() {
             details.
           </p>
         </div>
-        <a
-          href="#booking"
-          className="font-body shrink-0 rounded-full bg-[#e3ab93] px-6 py-3.5 text-sm font-semibold text-[#3a241f] hover:bg-[#edc1ac]"
-        >
-          Book an appointment
-        </a>
+        <BookButton className="font-body shrink-0 rounded-full bg-[#e3ab93] px-6 py-3.5 text-sm font-semibold text-[#3a241f] hover:bg-[#edc1ac]" />
       </Container>
     </section>
   );

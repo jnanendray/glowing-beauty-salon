@@ -5,17 +5,24 @@ import { createClient } from "@/lib/supabase/client";
 
 type EmailState = "idle" | "sending" | "sent" | "error";
 
-export default function LoginForm() {
+export default function LoginForm({ next = "/" }: { next?: string }) {
   const [email, setEmail] = useState("");
   const [state, setState] = useState<EmailState>("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  function callbackUrl() {
+    const url = new URL("/auth/callback", window.location.origin);
+    url.searchParams.set("next", next);
+    return url.toString();
+  }
 
   async function signInWithGoogle() {
     setGoogleLoading(true);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo: callbackUrl() },
     });
     // On success the browser navigates away to Google, so only an
     // immediate error (e.g. provider not enabled yet) lands here.
@@ -29,8 +36,9 @@ export default function LoginForm() {
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      options: { emailRedirectTo: callbackUrl() },
     });
+    setErrorMessage(error?.message ?? null);
     setState(error ? "error" : "sent");
   }
 
@@ -88,7 +96,7 @@ export default function LoginForm() {
           </button>
           {state === "error" && (
             <p className="font-body text-xs text-red-600">
-              Something went wrong sending that link — check the email address and try again.
+              {errorMessage ?? "Something went wrong sending that link — check the email address and try again."}
             </p>
           )}
           <p className="font-body text-xs text-[#8a6b61]">
