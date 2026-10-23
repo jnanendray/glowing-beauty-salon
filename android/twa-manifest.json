@@ -1,0 +1,43 @@
+{
+  "packageId": "com.glowingbeautysalon.app",
+  "host": "glowing-beauty-salon.vercel.app",
+  "name": "Glowing Beauty Salon",
+  "launcherName": "Glowing Beauty",
+  "display": "standalone",
+  "orientation": "portrait",
+  "themeColor": "#B8765F",
+  "themeColorDark": "#3A241F",
+  "navigationColor": "#FDF5F1",
+  "navigationColorDark": "#3A241F",
+  "navigationDividerColor": "#FDF5F1",
+  "navigationDividerColorDark": "#3A241F",
+  "backgroundColor": "#FDF5F1",
+  "enableNotifications": false,
+  "startUrl": "/",
+  "iconUrl": "https://glowing-beauty-salon.vercel.app/icons/icon-512.png",
+  "maskableIconUrl": "https://glowing-beauty-salon.vercel.app/icons/maskable-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "glowing"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "appVersion": "1",
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://glowing-beauty-salon.vercel.app/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://glowing-beauty-salon.vercel.app/",
+  "minSdkVersion": 21,
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": []
+}
