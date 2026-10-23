@@ -191,7 +191,10 @@ export function Services() {
                 <p className="font-body mt-2 text-sm leading-relaxed text-[#6b4c42]">
                   {s.desc}
                 </p>
-                <BookButton className="font-body mt-4 inline-block text-sm font-semibold text-[#b8765f] hover:text-[#9a5a46]">
+                <BookButton
+                  presetService={s.name}
+                  className="font-body mt-4 inline-block text-sm font-semibold text-[#b8765f] hover:text-[#9a5a46]"
+                >
                   Book this service →
                 </BookButton>
               </div>
