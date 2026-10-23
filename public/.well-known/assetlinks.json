@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.glowingbeautysalon.app",
+      "sha256_cert_fingerprints": ["CC:FB:1F:C1:52:3E:F8:E9:47:89:24:4A:41:18:E6:8F:F4:A8:CD:5A:CB:62:FB:2D:41:94:CA:6C:FC:E7:A9:08"]
+    }
+  }
+]
