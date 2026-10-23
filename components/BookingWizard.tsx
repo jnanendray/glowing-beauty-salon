@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import LocationPicker, { type Coords } from "@/components/LocationPicker";
 
 type Service = {
   id: string;
@@ -101,6 +102,13 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
   const [locationType, setLocationType] = useState<LocationType>("salon");
   const [address, setAddress] = useState("");
   const [area, setArea] = useState("");
+  const [coords, setCoords] = useState<Coords | null>(null);
+  // Fill in street/area from the map pin, but never overwrite what the
+  // customer has typed themselves.
+  const handleAddressFound = useCallback((found: { address: string; area: string }) => {
+    setAddress((prev) => (prev.trim() ? prev : found.address));
+    setArea((prev) => (prev.trim() ? prev : found.area));
+  }, []);
 
   const [stylistOptions, setStylistOptions] = useState<Stylist[]>([]);
   const [stylistsLoading, setStylistsLoading] = useState(false);
@@ -347,6 +355,8 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
       location_type: locationType,
       address: locationType === "home" ? address.trim() : null,
       area: locationType === "home" ? area.trim() : null,
+      latitude: locationType === "home" && coords ? coords.lat : null,
+      longitude: locationType === "home" && coords ? coords.lng : null,
       home_service_charge: locationType === "home" ? selectedService.home_service_charge : 0,
       status: "confirmed",
       notes: notes.trim() || null,
@@ -469,10 +479,7 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
                     placeholder="Area / neighbourhood"
                     className="font-body rounded-full border border-[#3a241f]/15 bg-white px-5 py-3 text-sm text-[#3a241f] outline-none focus-visible:border-[#b8765f]"
                   />
-                  <p className="font-body text-xs text-[#8a6b61]">
-                    Map pin and &ldquo;use my location&rdquo; are coming soon — for now, just describe your
-                    address and area.
-                  </p>
+                  <LocationPicker value={coords} onChange={setCoords} onAddressFound={handleAddressFound} />
                 </div>
               )}
 
