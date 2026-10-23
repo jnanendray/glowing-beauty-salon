@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
+import ChatWidget from "@/components/ChatWidget";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${playfair.variable} ${inter.variable} bg-[#fdf5f1] text-[#3a241f] antialiased`}
       >
         {children}
+        <ChatWidget />
       </body>
     </html>
   );
