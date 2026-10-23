@@ -36,7 +36,7 @@
   "isChromeOSOnly": false,
   "isMetaQuest": false,
   "fullScopeUrl": "https://glowing-beauty-salon.vercel.app/",
-  "minSdkVersion": 21,
+  "minSdkVersion": 24,
   "fingerprints": [],
   "additionalTrustedOrigins": [],
   "retainedBundles": []
