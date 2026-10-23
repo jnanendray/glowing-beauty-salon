@@ -17,6 +17,12 @@ on:
     paths:
       - "android/**"
       - ".github/workflows/android-app.yml"
+  # Pull requests that touch the app get a test build (downloadable
+  # from the run) but nothing is published.
+  pull_request:
+    paths:
+      - "android/**"
+      - ".github/workflows/android-app.yml"
 
 permissions:
   contents: write
@@ -24,6 +30,10 @@ permissions:
 concurrency:
   group: android-build
   cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -eo pipefail {0}
 
 jobs:
   build:
@@ -33,7 +43,7 @@ jobs:
       SITE: https://glowing-beauty-salon.vercel.app
       VERSION_NAME: 1.0.${{ github.run_number }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Check signing secrets
         env:
@@ -45,17 +55,18 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Wait until the website serves the app files
         run: |
+          trap 'echo "::error title=Wait until the website serves the app files::Command failed (exit $?): $BASH_COMMAND"' ERR
           for i in $(seq 1 30); do
             if curl -fsS -o /dev/null "$SITE/icons/icon-512.png" \
               && curl -fsS -o /dev/null "$SITE/.well-known/assetlinks.json" \
@@ -71,6 +82,7 @@ jobs:
 
       - name: Install Bubblewrap and accept Android SDK licences
         run: |
+          trap 'echo "::error title=Install Bubblewrap and accept Android SDK licences::Command failed (exit $?): $BASH_COMMAND"' ERR
           npm install -g @bubblewrap/cli
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
           mkdir -p ~/.bubblewrap
@@ -81,9 +93,19 @@ jobs:
         working-directory: android
         env:
           KS: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          PW: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
+          trap 'echo "::error title=Generate the Android project::Command failed (exit $?): $BASH_COMMAND"' ERR
           set -o pipefail
-          echo "$KS" | base64 -d > android.keystore
+          # Pasted secrets sometimes pick up spaces/line breaks — strip them.
+          if ! printf '%s' "$KS" | tr -d '[:space:]' | base64 -d > android.keystore 2>/dev/null; then
+            echo "::error title=Signing key::ANDROID_KEYSTORE_BASE64 isn't valid. Re-copy the whole long line from android-signing-secrets.txt into the secret."
+            exit 1
+          fi
+          if ! keytool -list -keystore android.keystore -storepass "$PW" -alias glowing > /dev/null 2>&1; then
+            echo "::error title=Signing key::The keystore didn't open with ANDROID_KEYSTORE_PASSWORD (or alias 'glowing' is missing). Check both secrets match android-signing-secrets.txt exactly."
+            exit 1
+          fi
           # Each build gets a higher version number so phones accept it as an update.
           jq --argjson code "${{ github.run_number }}" --arg name "$VERSION_NAME" \
             '.appVersionCode = $code | .appVersionName = $name | .appVersion = ($code | tostring)' \
@@ -100,6 +122,7 @@ jobs:
           BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
+          trap 'echo "::error title=Build the signed APK::Command failed (exit $?): $BASH_COMMAND"' ERR
           set -o pipefail
           if ! bubblewrap build --skipPwaValidation --manifest=./twa-manifest.json < /dev/null 2>&1 | tee build.log; then
             msg=$(tail -n 60 build.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')
@@ -116,9 +139,11 @@ jobs:
           path: GlowingBeautySalon-${{ env.VERSION_NAME }}.apk
 
       - name: Publish as a GitHub Release
+        if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          trap 'echo "::error title=Publish as a GitHub Release::Command failed (exit $?): $BASH_COMMAND"' ERR
           gh release create "android-$VERSION_NAME" "GlowingBeautySalon-$VERSION_NAME.apk" \
             --title "Android app $VERSION_NAME" \
             --latest \
