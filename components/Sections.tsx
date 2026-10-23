@@ -56,9 +56,9 @@ export function Hero() {
   return (
     <section id="top" className="blush-field">
       <Container className="grid gap-10 py-16 md:py-24 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-        <div>
+        <div className="min-w-0">
           <div className="wordmark-wrap">
-            <p className="wordmark-line font-display text-[3.4rem] italic font-semibold leading-none sm:text-[4.4rem] md:text-[5.6rem]">
+            <p className="wordmark-line font-display text-[length:clamp(2.4rem,13vw,3.4rem)] italic font-semibold leading-none sm:text-[4.4rem] md:text-[5.6rem]">
               <span className="wordmark-textstack">
                 <span className="wordmark-extrude">Glowing</span>
                 <span className="wordmark-fill fill-primary">Glowing</span>
@@ -78,7 +78,7 @@ export function Hero() {
                 <circle cx="32" cy="32" r="6.5" fill="#f4cc85" stroke="#b8765f" strokeWidth="1.6" />
               </svg>
             </p>
-            <p className="wordmark-line font-display mt-2 text-[2rem] font-semibold uppercase leading-none tracking-[0.2em] sm:text-[2.5rem] md:text-[3.1rem]">
+            <p className="wordmark-line font-display mt-2 text-[length:clamp(1.3rem,7vw,2rem)] font-semibold uppercase leading-none tracking-[0.16em] sm:text-[2.5rem] sm:tracking-[0.2em] md:text-[3.1rem]">
               <span className="wordmark-textstack">
                 <span className="wordmark-extrude">Beauty Salon</span>
                 <span className="wordmark-fill fill-secondary">Beauty Salon</span>
@@ -108,8 +108,8 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-4">
+        <div className="grid min-w-0 grid-cols-2 gap-4">
+          <div className="flex min-w-0 flex-col gap-4">
             <div className="aspect-[3/4] overflow-hidden rounded-[28px] bg-[#f1d9cf] shadow-[0_18px_40px_rgba(58,36,31,0.12)]">
               <Image
                 src="/hero/hero-1.jpg"
@@ -121,7 +121,7 @@ export function Hero() {
               />
             </div>
           </div>
-          <div className="flex flex-col gap-4 pt-10">
+          <div className="flex min-w-0 flex-col gap-4 pt-10">
             <div className="aspect-square overflow-hidden rounded-[28px] bg-[#f1d9cf] shadow-[0_18px_40px_rgba(58,36,31,0.12)]">
               <Image
                 src="/hero/hero-2.jpg"

@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* Never let the page scroll sideways on a phone. `clip` (not `hidden`)
+   keeps the sticky header working. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 .font-display {
   font-family: var(--font-playfair), serif;
 }

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import ChatWidget from "@/components/ChatWidget";
@@ -25,6 +25,12 @@ export const metadata: Metadata = {
   title: "Glowing Beauty Salon | Premium Hair, Skin & Bridal Studio",
   description:
     "Book hair, skin, spa and bridal appointments at Glowing Beauty Salon — in-studio or at your doorstep. Choose your stylist, pick a slot, and glow.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#b8765f",
 };
 
 export default function RootLayout({
