@@ -70,5 +70,12 @@ function displayName(user: { user_metadata?: Record<string, unknown>; email?: st
   if (!user) return null;
   const name = user.user_metadata?.full_name ?? user.user_metadata?.name;
   if (typeof name === "string" && name.trim()) return name.trim().split(" ")[0];
-  return user.email ?? "there";
+  if (user.email) {
+    // No name on file (e.g. email-link sign-in collected no name) —
+    // use the part before "@" rather than the full address, so the
+    // header reads "Hi, ravan" instead of a long email string.
+    return user.email.split("@")[0];
+  }
+
+  return "there";
 }
