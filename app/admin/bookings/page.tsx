@@ -32,6 +32,8 @@ type BookingRow = {
   location_type: "salon" | "home";
   address: string | null;
   area: string | null;
+  latitude: number | null;
+  longitude: number | null;
   status: "confirmed" | "completed" | "cancelled" | "no_show";
   notes: string | null;
   stylist_id: string;
@@ -50,7 +52,7 @@ const STATUS_STYLE: Record<BookingRow["status"], { label: string; className: str
 };
 
 const BOOKING_SELECT =
-  "id, booking_date, start_time, end_time, location_type, address, area, status, notes, stylist_id, customer:customers(full_name, email, phone), stylist:stylists(name), service:services(name)";
+  "id, booking_date, start_time, end_time, location_type, address, area, latitude, longitude, status, notes, stylist_id, customer:customers(full_name, email, phone), stylist:stylists(name), service:services(name)";
 
 function parseView(value: string | undefined): View {
   return value === "day" || value === "week" || value === "list" ? value : "month";
@@ -464,9 +466,19 @@ function BookingCard({
       )}
 
       {b.location_type === "home" && (
-        <p className="font-body mt-1.5 rounded-lg bg-[#fdf5f1] px-2 py-1 text-xs text-[#8a4a37]">
-          At home{compact ? "" : ` — ${[b.address, b.area].filter(Boolean).join(", ")}`}
-        </p>
+        <div className="font-body mt-1.5 rounded-lg bg-[#fdf5f1] px-2 py-1 text-xs text-[#8a4a37]">
+          <p>At home{compact ? "" : ` — ${[b.address, b.area].filter(Boolean).join(", ")}`}</p>
+          {b.latitude !== null && b.longitude !== null && (
+            <a
+              href={`https://www.google.com/maps/dir/?api=1&destination=${b.latitude},${b.longitude}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-0.5 inline-block font-semibold underline underline-offset-2"
+            >
+              Open in Maps ↗
+            </a>
+          )}
+        </div>
       )}
 
       {!compact && b.notes && (
