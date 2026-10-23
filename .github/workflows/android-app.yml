@@ -138,7 +138,13 @@ jobs:
           trap 'echo "::error title=Build the signed APK::Command failed (exit $?): $BASH_COMMAND"' ERR
           set -o pipefail
           if ! bubblewrap build --skipPwaValidation --manifest=./twa-manifest.json < /dev/null 2>&1 | tee build.log; then
-            msg=$(tail -n 60 build.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')
+            # Gradle's useful part is "What went wrong" + error lines, not the stack trace.
+            { grep -n -A 14 "What went wrong" build.log || true
+              echo "----- error lines -----"
+              grep -inE "error|failed|exception|cannot|could not|unsupported" build.log | grep -vE "^\s*[0-9]+:\s+at " | head -40 || true
+              echo "----- last lines (no stack) -----"
+              grep -vE "^\s+at |^\s*\.\.\. [0-9]+ more" build.log | tail -n 25; } > summary.log
+            msg=$(head -c 7000 summary.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')
             echo "::error title=bubblewrap build failed::$msg"
             exit 1
           fi
