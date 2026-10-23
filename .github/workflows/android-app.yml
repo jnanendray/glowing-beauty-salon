@@ -98,8 +98,10 @@ jobs:
           trap 'echo "::error title=Generate the Android project::Command failed (exit $?): $BASH_COMMAND"' ERR
           set -o pipefail
           # Pasted secrets sometimes pick up spaces/line breaks — strip them.
-          if ! printf '%s' "$KS" | tr -d '[:space:]' | base64 -d > android.keystore 2>/dev/null; then
-            echo "::error title=Signing key::ANDROID_KEYSTORE_BASE64 isn't valid. Re-copy the whole long line from android-signing-secrets.txt into the secret."
+          CLEAN=$(printf '%s' "$KS" | tr -d '[:space:]')
+          if ! printf '%s' "$CLEAN" | base64 -d > android.keystore 2> b64.err; then
+            BAD=$(printf '%s' "$CLEAN" | tr -d 'A-Za-z0-9+/=' | wc -c)
+            echo "::error title=Signing key::ANDROID_KEYSTORE_BASE64 isn't valid (length ${#CLEAN}, expected 3576; ${BAD} unexpected characters; decoder said: $(cat b64.err)). Paste the entire contents of ANDROID_KEYSTORE_BASE64.txt and nothing else."
             exit 1
           fi
           if ! keytool -list -keystore android.keystore -storepass "$PW" -alias glowing > /dev/null 2>&1; then
