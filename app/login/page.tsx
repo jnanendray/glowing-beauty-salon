@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Container from "@/components/Container";
 import LoginForm from "@/components/LoginForm";
 
@@ -11,9 +12,9 @@ export default function LoginPage() {
   return (
     <main className="blush-field flex min-h-screen items-center justify-center py-16">
       <Container className="flex flex-col items-center">
-        <a href="/" className="font-body mb-8 text-sm font-medium text-[#8a6b61] hover:text-[#3a241f]">
+        <Link href="/" className="font-body mb-8 text-sm font-medium text-[#8a6b61] hover:text-[#3a241f]">
           ← Back to Glowing Beauty Salon
-        </a>
+        </Link>
 
         <div className="w-full max-w-[420px] rounded-3xl border border-[#3a241f]/10 bg-white/70 p-8 shadow-[0_20px_60px_-20px_rgba(58,36,31,0.25)] backdrop-blur">
           <h1 className="font-display mb-1 text-2xl font-semibold text-[#3a241f]">Welcome back</h1>

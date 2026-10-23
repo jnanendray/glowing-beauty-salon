@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 /**
@@ -59,9 +60,9 @@ export default function AuthButton({ variant = "desktop" }: { variant?: "desktop
   }
 
   return (
-    <a href="/login" className={base}>
+    <Link href="/login" className={base}>
       Sign in
-    </a>
+    </Link>
   );
 }
 
