@@ -6,17 +6,20 @@ import { createClient } from "@/lib/supabase/client";
 
 /**
  * "Book an appointment" needs a signed-in customer, so it checks
- * session state first: signed out → /login (remembering #booking as
+ * session state first: signed out → /login (remembering /book as
  * where to return to once signed in); signed in → straight to the
- * booking section once it exists.
+ * booking page, with the service preselected when one is given.
  */
 export default function BookButton({
   className,
   onNavigate,
+  presetService,
   children = "Book an appointment",
 }: {
   className: string;
   onNavigate?: () => void;
+  /** The service's exact name, to preselect it on the booking page. */
+  presetService?: string;
   children?: React.ReactNode;
 }) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
@@ -33,7 +36,8 @@ export default function BookButton({
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  const href = signedIn ? "#booking" : "/login?next=%2F%23booking";
+  const bookPath = presetService ? `/book?service=${encodeURIComponent(presetService)}` : "/book";
+  const href = signedIn ? bookPath : `/login?next=${encodeURIComponent(bookPath)}`;
 
   return (
     <Link href={href} onClick={onNavigate} className={className}>
