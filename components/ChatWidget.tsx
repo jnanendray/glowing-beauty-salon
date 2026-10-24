@@ -154,7 +154,10 @@ export default function ChatWidget() {
       .single();
     setSending(false);
     if (insertError) {
-      setError("Couldn't send that — please try again.");
+      // The database explains rate limits in plain words — show those as-is.
+      setError(
+        insertError.message.includes("quickly") ? insertError.message : "Couldn't send that — please try again."
+      );
       return;
     }
     setDraft("");
