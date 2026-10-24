@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { isDemoSession } from "@/lib/demo";
 
 type EmailState = "idle" | "sending" | "sent" | "error";
 
@@ -10,6 +12,12 @@ export default function LoginForm({ next = "/" }: { next?: string }) {
   const [state, setState] = useState<EmailState>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const router = useRouter();
+
+  // Inside the demo app, every "Sign in" goes to the demo sign-in instead.
+  useEffect(() => {
+    if (isDemoSession()) router.replace(`/demo?next=${encodeURIComponent(next)}`);
+  }, [next, router]);
 
   function callbackUrl() {
     const url = new URL("/auth/callback", window.location.origin);

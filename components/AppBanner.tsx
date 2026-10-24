@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { isDemoSession, startDemoSession } from "@/lib/demo";
 
 /**
  * One slim bar at the very top of the page, for Android only:
@@ -24,6 +25,7 @@ const SS_APP_V = "gbs_app_v";
 const SS_LATEST = "gbs_latest_app";
 const LS_GET_APP_DISMISSED = "gbs_get_app_dismissed_until";
 const SS_UPDATE_DISMISSED = "gbs_update_dismissed";
+const SS_DEMO_DISMISSED = "gbs_demo_note_dismissed";
 
 type Latest = {
   available: boolean;
@@ -35,7 +37,8 @@ type Latest = {
 type Banner =
   | { kind: "none" }
   | { kind: "update"; latest: Required<Pick<Latest, "versionCode" | "versionName" | "apkUrl">> }
-  | { kind: "get-app"; apkUrl: string; browserCopy: boolean };
+  | { kind: "get-app"; apkUrl: string; browserCopy: boolean }
+  | { kind: "demo" };
 
 function safeGet(store: Storage | undefined, key: string): string | null {
   try {
@@ -77,6 +80,21 @@ export default function AppBanner() {
   useEffect(() => {
     const ss = window.sessionStorage;
     const url = new URL(window.location.href);
+
+    // The demo app (and the /demo page) runs in demo mode: no update or
+    // "get the app" prompts, just a small note that this is a demo.
+    if (url.searchParams.get("demo_app") === "1" || url.pathname === "/demo") {
+      startDemoSession();
+      if (url.searchParams.has("demo_app") || url.searchParams.has("app_v")) {
+        url.searchParams.delete("demo_app");
+        url.searchParams.delete("app_v");
+        window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+      }
+    }
+    if (isDemoSession()) {
+      if (safeGet(ss, SS_DEMO_DISMISSED) !== "1") setBanner({ kind: "demo" });
+      return;
+    }
 
     // 1. Are we inside our Android app? Remember it for this session.
     let inApp = safeGet(ss, SS_IN_APP) === "1";
@@ -123,6 +141,32 @@ export default function AppBanner() {
   }, []);
 
   if (banner.kind === "none") return null;
+
+  if (banner.kind === "demo") {
+    return (
+      <div role="region" aria-label="Demo mode" className="font-body relative z-50 bg-[#3a241f] text-[#fdf5f1]">
+        <div className="mx-auto flex max-w-[1760px] items-center gap-3 px-4 py-2 md:px-10">
+          <p className="min-w-0 flex-1 text-xs leading-snug sm:text-sm">
+            <span className="mr-2 rounded-full bg-[#e3ab93] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#3a241f]">
+              Demo
+            </span>
+            Sign in with any number — your code shows on screen. Bookings you make are marked as demo.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              safeSet(window.sessionStorage, SS_DEMO_DISMISSED, "1");
+              setBanner({ kind: "none" });
+            }}
+            aria-label="Dismiss"
+            className="shrink-0 rounded-full px-2 py-1 text-sm opacity-70 hover:opacity-100"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   function dismiss() {
     if (banner.kind === "update") {

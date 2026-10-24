@@ -28,6 +28,7 @@ export default async function AdminRecallPage({
     supabase
       .from("customers")
       .select("id, full_name, email, phone, marketing_consent, last_visit_at")
+      .eq("is_demo", false) // demo-app guests never get reminders
       .not("last_visit_at", "is", null)
       .lte("last_visit_at", cutoff)
       .order("last_visit_at", { ascending: true }),

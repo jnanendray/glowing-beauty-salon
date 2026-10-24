@@ -9,6 +9,7 @@ type CustomerRow = {
   marketing_consent: boolean;
   last_visit_at: string | null;
   created_at: string;
+  is_demo: boolean;
 };
 
 type BookingLite = { customer_id: string; status: string; booking_date: string };
@@ -25,7 +26,7 @@ export default async function AdminCustomersPage({
 
   let customersQuery = supabase
     .from("customers")
-    .select("id, full_name, email, phone, marketing_consent, last_visit_at, created_at")
+    .select("id, full_name, email, phone, marketing_consent, last_visit_at, created_at, is_demo")
     .order("created_at", { ascending: false })
     .limit(500);
 
@@ -113,6 +114,7 @@ export default async function AdminCustomersPage({
                     <td className="px-4 py-3">
                       <p className="font-medium text-[#3a241f]">
                         {c.full_name || <span className="text-[#806155]">No name yet</span>}
+                        {c.is_demo && <span className="ml-1.5 rounded-full bg-[#3a241f] px-1.5 py-0.5 align-middle text-[9px] font-bold uppercase tracking-wide text-[#fdf5f1]">Demo</span>}
                       </p>
                       <p className="text-xs text-[#806155]">
                         Joined {new Date(c.created_at).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}
