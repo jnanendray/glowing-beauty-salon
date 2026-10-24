@@ -37,7 +37,7 @@ type BookingRow = {
   status: "confirmed" | "completed" | "cancelled" | "no_show";
   notes: string | null;
   stylist_id: string;
-  customer: { full_name: string | null; email: string | null; phone: string | null } | null;
+  customer: { full_name: string | null; email: string | null; phone: string | null; is_demo: boolean } | null;
   stylist: { name: string } | null;
   service: { name: string } | null;
 };
@@ -52,7 +52,7 @@ const STATUS_STYLE: Record<BookingRow["status"], { label: string; className: str
 };
 
 const BOOKING_SELECT =
-  "id, booking_date, start_time, end_time, location_type, address, area, latitude, longitude, status, notes, stylist_id, customer:customers(full_name, email, phone), stylist:stylists(name), service:services(name)";
+  "id, booking_date, start_time, end_time, location_type, address, area, latitude, longitude, status, notes, stylist_id, customer:customers(full_name, email, phone, is_demo), stylist:stylists(name), service:services(name)";
 
 function parseView(value: string | undefined): View {
   return value === "day" || value === "week" || value === "list" ? value : "month";
@@ -454,6 +454,7 @@ function BookingCard({
       <p className="font-body mt-1 text-sm text-[#3a241f]">{b.service?.name ?? "Service"}</p>
       <p className="font-body text-xs text-[#5c4038]">
         {customerName}
+        {b.customer?.is_demo && <span className="ml-1.5 rounded-full bg-[#3a241f] px-1.5 py-0.5 align-middle text-[9px] font-bold uppercase tracking-wide text-[#fdf5f1]">Demo</span>}
         {showStylist && b.stylist?.name ? ` · with ${b.stylist.name}` : ""}
       </p>
 

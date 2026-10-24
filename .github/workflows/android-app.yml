@@ -1,9 +1,12 @@
-# Builds the Android app (a Trusted Web Activity around the live site)
-# for free on GitHub's servers, then publishes the APK as a GitHub
-# Release so it can be downloaded straight onto a phone.
+# Builds the Android apps (Trusted Web Activities around the live site)
+# for free on GitHub's servers, then publishes each APK as a GitHub
+# Release so it can be downloaded straight onto a phone:
+#   • android/       → the real app   (com.glowingbeautysalon.app)
+#   • android-demo/  → the demo app   (com.glowingbeautysalon.demo),
+#                      opens the demo sign-in with an on-screen OTP
 #
-# Runs when android/ or this file changes on main, or on demand from
-# the Actions tab ("Run workflow").
+# Runs when either app folder or this file changes on main, or on
+# demand from the Actions tab ("Run workflow").
 #
 # Needs two repository secrets (Settings → Secrets and variables →
 # Actions): ANDROID_KEYSTORE_BASE64 and ANDROID_KEYSTORE_PASSWORD.
@@ -16,20 +19,18 @@ on:
     branches: [main]
     paths:
       - "android/**"
+      - "android-demo/**"
       - ".github/workflows/android-app.yml"
   # Pull requests that touch the app get a test build (downloadable
   # from the run) but nothing is published.
   pull_request:
     paths:
       - "android/**"
+      - "android-demo/**"
       - ".github/workflows/android-app.yml"
 
 permissions:
   contents: write
-
-concurrency:
-  group: android-build
-  cancel-in-progress: false
 
 defaults:
   run:
@@ -37,8 +38,34 @@ defaults:
 
 jobs:
   build:
+    name: build (${{ matrix.app.id }})
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - id: main
+            dir: android
+            file: GlowingBeautySalon
+            tag: android
+            title: Android app
+            latest: "true"
+            start: "/?app_v="
+            icon: icons/icon-512.png
+            notes: "Open this page on an Android phone, tap the .apk file below to download it, then open it to install. If the app is already installed, this replaces it (you stay signed in). You may need to allow installs from your browser the first time (Android asks automatically). The app shows an Update button by itself when a new version is out."
+          - id: demo
+            dir: android-demo
+            file: GlowingBeautyDemo
+            tag: android-demo
+            title: Demo app
+            latest: "false"
+            start: "/demo?demo_app=1&app_v="
+            icon: icons/demo-icon-512.png
+            notes: "DEMO app — for showing the salon app to clients. Sign in with any name and phone number; the OTP is shown on screen (no SMS is sent). Installs next to the real app. Open this page on an Android phone, tap the .apk below, then open it to install."
+    concurrency:
+      group: android-build-${{ matrix.app.id }}
+      cancel-in-progress: false
     env:
       SITE: https://glowing-beauty-salon.vercel.app
       VERSION_NAME: 1.0.${{ github.run_number }}
@@ -68,7 +95,8 @@ jobs:
         run: |
           trap 'echo "::error title=Wait until the website serves the app files::Command failed (exit $?): $BASH_COMMAND"' ERR
           for i in $(seq 1 30); do
-            if curl -fsS -o /dev/null "$SITE/icons/icon-512.png" \
+            # PR test builds run before new icons are live — check the main icon then.
+            if curl -fsS -o /dev/null "$SITE/${{ github.event_name == 'pull_request' && 'icons/icon-512.png' || matrix.app.icon }}" \
               && curl -fsS -o /dev/null "$SITE/.well-known/assetlinks.json" \
               && curl -fsS -o /dev/null "$SITE/manifest.webmanifest"; then
               echo "Website is ready."
@@ -90,18 +118,12 @@ jobs:
           if [ ! -e "$ANDROID_HOME/tools" ]; then
             sudo ln -s "$ANDROID_HOME/cmdline-tools/latest" "$ANDROID_HOME/tools"
           fi
-          # Bubblewrap checks for the old "tools" folder; GitHub's SDK only has
-          # the newer cmdline-tools, so point the old name at it.
-          if [ ! -e "$ANDROID_HOME/tools" ]; then
-            sudo ln -s "$ANDROID_HOME/cmdline-tools/latest" "$ANDROID_HOME/tools"
-          fi
-          ls -la "$ANDROID_HOME" | head -20
           mkdir -p ~/.bubblewrap
           printf '{"jdkPath":"%s","androidSdkPath":"%s"}\n' "$JAVA_HOME" "$ANDROID_HOME" > ~/.bubblewrap/config.json
           cat ~/.bubblewrap/config.json
 
       - name: Generate the Android project
-        working-directory: android
+        working-directory: ${{ matrix.app.dir }}
         env:
           KS: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           PW: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -120,9 +142,21 @@ jobs:
             exit 1
           fi
           # Each build gets a higher version number so phones accept it as an update.
-          jq --argjson code "${{ github.run_number }}" --arg name "$VERSION_NAME" \
-            '.appVersionCode = $code | .appVersionName = $name | .appVersion = ($code | tostring) | .startUrl = ("/?app_v=" + ($code | tostring))' \
+          jq --argjson code "${{ github.run_number }}" --arg name "$VERSION_NAME" --arg start "${{ matrix.app.start }}" \
+            '.appVersionCode = $code | .appVersionName = $name | .appVersion = ($code | tostring) | .startUrl = ($start + ($code | tostring))' \
             twa-manifest.json > twa.tmp && mv twa.tmp twa-manifest.json
+          # A new app's icon only goes live once its PR is merged. For PR test
+          # builds, borrow the main icon so the build can still be checked.
+          if ! curl -fsS -o /dev/null "$(jq -r .iconUrl twa-manifest.json)"; then
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              echo "::warning::Icon not live yet — this PR test build uses the main app icon."
+              jq --arg i "$SITE/icons/icon-512.png" --arg m "$SITE/icons/maskable-512.png" \
+                '.iconUrl = $i | .maskableIconUrl = $m' twa-manifest.json > twa.tmp && mv twa.tmp twa-manifest.json
+            else
+              echo "::error title=Icon missing::$(jq -r .iconUrl twa-manifest.json) isn't reachable on the live site."
+              exit 1
+            fi
+          fi
           if ! bubblewrap update --skipVersionUpgrade --manifest=./twa-manifest.json < /dev/null 2>&1 | tee update.log; then
             msg=$(tail -n 60 update.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')
             echo "::error title=bubblewrap update failed::$msg"
@@ -130,7 +164,7 @@ jobs:
           fi
 
       - name: Build the signed APK
-        working-directory: android
+        working-directory: ${{ matrix.app.dir }}
         env:
           BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -149,13 +183,13 @@ jobs:
             exit 1
           fi
           ls -la *.apk
-          cp app-release-signed.apk "../GlowingBeautySalon-$VERSION_NAME.apk"
+          cp app-release-signed.apk "../${{ matrix.app.file }}-$VERSION_NAME.apk"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: GlowingBeautySalon-${{ env.VERSION_NAME }}
-          path: GlowingBeautySalon-${{ env.VERSION_NAME }}.apk
+          name: ${{ matrix.app.file }}-${{ env.VERSION_NAME }}
+          path: ${{ matrix.app.file }}-${{ env.VERSION_NAME }}.apk
 
       - name: Publish as a GitHub Release
         if: github.ref == 'refs/heads/main'
@@ -163,7 +197,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           trap 'echo "::error title=Publish as a GitHub Release::Command failed (exit $?): $BASH_COMMAND"' ERR
-          gh release create "android-$VERSION_NAME" "GlowingBeautySalon-$VERSION_NAME.apk" \
-            --title "Android app $VERSION_NAME" \
-            --latest \
-            --notes "Open this page on an Android phone, tap the .apk file below to download it, then open it to install. If the app is already installed, this replaces it (you stay signed in). You may need to allow installs from your browser the first time (Android asks automatically). Apps from now on show an Update button by themselves when a new version is out."
+          # Only the real app is ever "latest" — the website's update check reads that.
+          gh release create "${{ matrix.app.tag }}-$VERSION_NAME" "${{ matrix.app.file }}-$VERSION_NAME.apk" \
+            --title "${{ matrix.app.title }} $VERSION_NAME" \
+            --latest=${{ matrix.app.latest }} \
+            --notes "${{ matrix.app.notes }}"
