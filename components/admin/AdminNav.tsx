@@ -60,7 +60,7 @@ export default function AdminNav() {
           >
             {tab.label}
             {badge > 0 && (
-              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#b8765f] px-1.5 text-[10px] font-bold text-white">
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#9d5d48] px-1.5 text-[10px] font-bold text-white">
                 {badge}
               </span>
             )}

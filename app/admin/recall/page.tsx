@@ -77,7 +77,7 @@ export default async function AdminRecallPage({
             WhatsApp or email on your own phone, at no cost.
           </p>
         </div>
-        <span className="font-body mt-2 rounded-full bg-stone-200 px-3 py-1 text-xs font-semibold text-stone-500 md:mt-0">
+        <span className="font-body mt-2 rounded-full bg-stone-200 px-3 py-1 text-xs font-semibold text-stone-600 md:mt-0">
           Off
         </span>
       </div>
@@ -104,7 +104,7 @@ export default async function AdminRecallPage({
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="font-body font-semibold text-[#3a241f]">{c.full_name || name}</p>
-                    <p className="font-body text-xs text-[#8a6b61]">
+                    <p className="font-body text-xs text-[#806155]">
                       Last visit {days} days ago ({Math.floor(days / 7)} weeks)
                     </p>
                   </div>
@@ -113,7 +113,7 @@ export default async function AdminRecallPage({
                       Opted in
                     </span>
                   ) : (
-                    <span className="font-body shrink-0 rounded-full bg-stone-100 px-2 py-0.5 text-[11px] text-stone-500">
+                    <span className="font-body shrink-0 rounded-full bg-stone-100 px-2 py-0.5 text-[11px] text-stone-600">
                       Not opted in
                     </span>
                   )}
@@ -145,7 +145,7 @@ export default async function AdminRecallPage({
                     )}
                   </div>
                 ) : (
-                  <p className="font-body mt-3 text-xs text-[#8a6b61]">
+                  <p className="font-body mt-3 text-xs text-[#806155]">
                     This customer hasn&rsquo;t agreed to reminder messages, so no outreach buttons are shown.
                   </p>
                 )}

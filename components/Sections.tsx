@@ -92,7 +92,7 @@ export function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3.5">
-            <BookButton className="font-body rounded-full bg-[#b8765f] px-6 py-3.5 text-center text-sm font-semibold text-[#fdf5f1] hover:bg-[#c48670] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a241f]" />
+            <BookButton className="font-body rounded-full bg-[#9d5d48] px-6 py-3.5 text-center text-sm font-semibold text-[#fdf5f1] hover:bg-[#8a4f3d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a241f]" />
             <a
               href="#services"
               className="font-body rounded-full border border-[#c99a8a] px-6 py-3.5 text-center text-sm font-semibold text-[#3a241f] hover:bg-white/50"
@@ -193,7 +193,7 @@ export function Services() {
                 </p>
                 <BookButton
                   presetService={s.name}
-                  className="font-body mt-4 inline-block text-sm font-semibold text-[#b8765f] hover:text-[#9a5a46]"
+                  className="font-body mt-4 inline-block text-sm font-semibold text-[#9d5d48] hover:text-[#9a5a46]"
                 >
                   Book this service →
                 </BookButton>
@@ -238,7 +238,7 @@ export function HowItWorks() {
               key={step.title}
               className="rounded-2xl border border-[#3a241f]/8 bg-white p-6 shadow-[0_8px_24px_rgba(58,36,31,0.05)]"
             >
-              <span className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-[#b8765f] text-sm font-semibold text-[#fdf5f1]">
+              <span className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-[#9d5d48] text-sm font-semibold text-[#fdf5f1]">
                 {i + 1}
               </span>
               <h3 className="font-display mt-4 text-base font-semibold text-[#3a241f]">

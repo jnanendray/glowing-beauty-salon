@@ -18,7 +18,7 @@ export default async function LoginPage({
   return (
     <main className="blush-field flex min-h-screen items-center justify-center py-16">
       <Container className="flex flex-col items-center">
-        <Link href="/" className="font-body mb-8 text-sm font-medium text-[#8a6b61] hover:text-[#3a241f]">
+        <Link href="/" className="font-body mb-8 text-sm font-medium text-[#806155] hover:text-[#3a241f]">
           ← Back to Glowing Beauty Salon
         </Link>
 
@@ -30,7 +30,7 @@ export default async function LoginPage({
           <LoginForm next={next || "/"} />
         </div>
 
-        <p className="font-body mt-6 max-w-[420px] text-center text-xs text-[#8a6b61]">
+        <p className="font-body mt-6 max-w-[420px] text-center text-xs text-[#806155]">
           Phone and WhatsApp sign-in are coming soon — they need a paid SMS/WhatsApp service we only turn on for
           live client launches.
         </p>
