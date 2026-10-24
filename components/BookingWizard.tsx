@@ -489,7 +489,7 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
                   type="button"
                   disabled={locationType === "home" && (!address.trim() || !area.trim())}
                   onClick={() => setStep("stylist")}
-                  className="font-body rounded-full bg-[#b8765f] px-6 py-2.5 text-sm font-semibold text-[#fdf5f1] disabled:opacity-50"
+                  className="font-body rounded-full bg-[#9d5d48] px-6 py-2.5 text-sm font-semibold text-[#fdf5f1] disabled:opacity-50"
                 >
                   Continue
                 </button>
@@ -551,9 +551,9 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
                     onClick={() => setSelectedDateKey(d.key)}
                     className={`font-body rounded-xl border px-3 py-2 text-xs font-semibold transition ${
                       !d.works
-                        ? "cursor-not-allowed border-[#3a241f]/8 bg-[#3a241f]/5 text-[#8a6b61]/60"
+                        ? "cursor-not-allowed border-[#3a241f]/8 bg-[#3a241f]/5 text-[#806155]/60"
                         : selectedDateKey === d.key
-                          ? "border-[#b8765f] bg-[#b8765f] text-[#fdf5f1]"
+                          ? "border-[#b8765f] bg-[#9d5d48] text-[#fdf5f1]"
                           : "border-[#3a241f]/15 bg-white text-[#3a241f] hover:border-[#b8765f]"
                     }`}
                   >
@@ -584,9 +584,9 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
                             title={slot.booked ? "Already booked" : slot.past ? "This time has passed" : undefined}
                             className={`font-body rounded-xl border px-3.5 py-2 text-xs font-semibold transition ${
                               disabled
-                                ? "cursor-not-allowed border-[#3a241f]/8 bg-[#3a241f]/5 text-[#8a6b61]/50 line-through"
+                                ? "cursor-not-allowed border-[#3a241f]/8 bg-[#3a241f]/5 text-[#806155]/50 line-through"
                                 : selected
-                                  ? "border-[#b8765f] bg-[#b8765f] text-[#fdf5f1]"
+                                  ? "border-[#b8765f] bg-[#9d5d48] text-[#fdf5f1]"
                                   : "border-[#3a241f]/15 bg-white text-[#3a241f] hover:border-[#b8765f]"
                             }`}
                           >
@@ -605,7 +605,7 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
                   type="button"
                   disabled={!selectedSlot}
                   onClick={() => setStep("confirm")}
-                  className="font-body rounded-full bg-[#b8765f] px-6 py-2.5 text-sm font-semibold text-[#fdf5f1] disabled:opacity-50"
+                  className="font-body rounded-full bg-[#9d5d48] px-6 py-2.5 text-sm font-semibold text-[#fdf5f1] disabled:opacity-50"
                 >
                   Continue
                 </button>
@@ -679,7 +679,7 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
 
             {submitError && <p className="font-body mt-3 text-xs text-red-600">{submitError}</p>}
             {customerLoading && (
-              <p className="font-body mt-3 text-xs text-[#8a6b61]">Loading your profile…</p>
+              <p className="font-body mt-3 text-xs text-[#806155]">Loading your profile…</p>
             )}
           </div>
 
@@ -689,7 +689,7 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
               type="button"
               disabled={submitting || customerLoading}
               onClick={handleConfirm}
-              className="font-body rounded-full bg-[#b8765f] px-6 py-2.5 text-sm font-semibold text-[#fdf5f1] disabled:opacity-50"
+              className="font-body rounded-full bg-[#9d5d48] px-6 py-2.5 text-sm font-semibold text-[#fdf5f1] disabled:opacity-50"
             >
               {submitting ? "Booking…" : "Confirm booking"}
             </button>
@@ -705,7 +705,7 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
           </p>
           <Link
             href="/"
-            className="font-body mt-5 inline-block rounded-full bg-[#b8765f] px-6 py-2.5 text-sm font-semibold text-[#fdf5f1]"
+            className="font-body mt-5 inline-block rounded-full bg-[#9d5d48] px-6 py-2.5 text-sm font-semibold text-[#fdf5f1]"
           >
             Back to home
           </Link>
@@ -718,7 +718,7 @@ export default function BookingWizard({ presetServiceName }: { presetServiceName
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline justify-between gap-4 border-b border-[#3a241f]/8 py-1.5 last:border-0">
-      <dt className="text-[#8a6b61]">{label}</dt>
+      <dt className="text-[#806155]">{label}</dt>
       <dd className="text-right font-semibold">{value}</dd>
     </div>
   );
@@ -763,8 +763,8 @@ function StepIndicator({ step }: { step: Step }) {
           key={s.key}
           className={`font-body rounded-full px-3 py-1 text-xs font-semibold ${
             i <= activeIndex && activeIndex >= 0
-              ? "bg-[#b8765f] text-[#fdf5f1]"
-              : "bg-[#3a241f]/8 text-[#8a6b61]"
+              ? "bg-[#9d5d48] text-[#fdf5f1]"
+              : "bg-[#3a241f]/8 text-[#806155]"
           }`}
         >
           {s.label}

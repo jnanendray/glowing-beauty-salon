@@ -56,7 +56,7 @@ export default function LoginForm({ next = "/" }: { next?: string }) {
 
       <div className="my-6 flex items-center gap-3">
         <span className="h-px flex-1 bg-[#3a241f]/10" />
-        <span className="font-body text-xs font-medium uppercase tracking-wide text-[#8a6b61]">or</span>
+        <span className="font-body text-xs font-medium uppercase tracking-wide text-[#806155]">or</span>
         <span className="h-px flex-1 bg-[#3a241f]/10" />
       </div>
 
@@ -90,7 +90,7 @@ export default function LoginForm({ next = "/" }: { next?: string }) {
           <button
             type="submit"
             disabled={state === "sending"}
-            className="font-body rounded-full bg-[#b8765f] px-5 py-3 text-sm font-semibold text-[#fdf5f1] transition hover:bg-[#c48670] disabled:opacity-60"
+            className="font-body rounded-full bg-[#9d5d48] px-5 py-3 text-sm font-semibold text-[#fdf5f1] transition hover:bg-[#8a4f3d] disabled:opacity-60"
           >
             {state === "sending" ? "Sending link…" : "Send me a sign-in link"}
           </button>
@@ -99,7 +99,7 @@ export default function LoginForm({ next = "/" }: { next?: string }) {
               {errorMessage ?? "Something went wrong sending that link — check the email address and try again."}
             </p>
           )}
-          <p className="font-body text-xs text-[#8a6b61]">
+          <p className="font-body text-xs text-[#806155]">
             No password needed — we&rsquo;ll email you a secure link to sign in.
           </p>
         </form>
@@ -107,7 +107,7 @@ export default function LoginForm({ next = "/" }: { next?: string }) {
 
       <div className="my-6 flex items-center gap-3">
         <span className="h-px flex-1 bg-[#3a241f]/10" />
-        <span className="font-body text-xs font-medium uppercase tracking-wide text-[#8a6b61]">coming soon</span>
+        <span className="font-body text-xs font-medium uppercase tracking-wide text-[#806155]">coming soon</span>
         <span className="h-px flex-1 bg-[#3a241f]/10" />
       </div>
 

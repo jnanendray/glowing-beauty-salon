@@ -189,9 +189,9 @@ export default function AdminChat({ initialCustomerId }: { initialCustomerId: st
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto">
           {loading ? (
-            <p className="font-body p-4 text-sm text-[#8a6b61]">Loading…</p>
+            <p className="font-body p-4 text-sm text-[#806155]">Loading…</p>
           ) : conversations.length === 0 ? (
-            <p className="font-body p-4 text-sm text-[#8a6b61]">
+            <p className="font-body p-4 text-sm text-[#806155]">
               No messages yet. When a customer uses &ldquo;Chat with us&rdquo; on the website, it shows up here.
             </p>
           ) : (
@@ -216,17 +216,17 @@ export default function AdminChat({ initialCustomerId }: { initialCustomerId: st
                       >
                         {customerLabel(customers[c.customerId])}
                       </span>
-                      <span className="font-body shrink-0 text-[10px] text-[#8a6b61]">
+                      <span className="font-body shrink-0 text-[10px] text-[#806155]">
                         {formatMessageTime(c.last.created_at)}
                       </span>
                     </span>
                     <span className="flex items-center justify-between gap-2">
-                      <span className={`font-body truncate text-xs ${c.unread ? "text-[#3a241f]" : "text-[#8a6b61]"}`}>
+                      <span className={`font-body truncate text-xs ${c.unread ? "text-[#3a241f]" : "text-[#806155]"}`}>
                         {c.last.sender === "owner" ? "You: " : ""}
                         {c.last.body}
                       </span>
                       {c.unread > 0 && (
-                        <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-[#b8765f] px-1.5 text-[10px] font-bold text-white">
+                        <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-[#9d5d48] px-1.5 text-[10px] font-bold text-white">
                           {c.unread}
                         </span>
                       )}
@@ -243,7 +243,7 @@ export default function AdminChat({ initialCustomerId }: { initialCustomerId: st
       <section className={`min-h-0 flex-col ${selectedId ? "flex" : "hidden md:flex"}`}>
         {!selectedId ? (
           <div className="flex flex-1 items-center justify-center p-6">
-            <p className="font-body text-sm text-[#8a6b61]">Pick a conversation to read and reply.</p>
+            <p className="font-body text-sm text-[#806155]">Pick a conversation to read and reply.</p>
           </div>
         ) : (
           <>
@@ -260,7 +260,7 @@ export default function AdminChat({ initialCustomerId }: { initialCustomerId: st
                 <p className="font-body truncate text-sm font-semibold text-[#3a241f]">
                   {customerLabel(selectedCustomer)}
                 </p>
-                <p className="font-body truncate text-xs text-[#8a6b61]">
+                <p className="font-body truncate text-xs text-[#806155]">
                   {[selectedCustomer?.phone, selectedCustomer?.email].filter(Boolean).join(" · ")}
                 </p>
               </div>
@@ -268,7 +268,7 @@ export default function AdminChat({ initialCustomerId }: { initialCustomerId: st
 
             <div ref={threadRef} className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto bg-[#fdf5f1] px-4 py-4">
               {thread.length === 0 && (
-                <p className="font-body text-center text-xs text-[#8a6b61]">No messages in this conversation yet.</p>
+                <p className="font-body text-center text-xs text-[#806155]">No messages in this conversation yet.</p>
               )}
               {thread.map((m) => {
                 const mine = m.sender === "owner";
@@ -281,7 +281,7 @@ export default function AdminChat({ initialCustomerId }: { initialCustomerId: st
                     >
                       {m.body}
                     </div>
-                    <span className="font-body mt-0.5 px-1 text-[10px] text-[#8a6b61]">
+                    <span className="font-body mt-0.5 px-1 text-[10px] text-[#806155]">
                       {formatMessageTime(m.created_at)}
                       {mine && (m.read_at ? " · Seen" : " · Sent")}
                     </span>
@@ -316,7 +316,7 @@ export default function AdminChat({ initialCustomerId }: { initialCustomerId: st
                 <button
                   type="submit"
                   disabled={sending || !draft.trim()}
-                  className="font-body h-[42px] rounded-full bg-[#b8765f] px-5 text-sm font-semibold text-[#fdf5f1] disabled:opacity-50"
+                  className="font-body h-[42px] rounded-full bg-[#9d5d48] px-5 text-sm font-semibold text-[#fdf5f1] disabled:opacity-50"
                 >
                   {sending ? "…" : "Send"}
                 </button>

@@ -267,7 +267,7 @@ export default function LocationPicker({
 
   if (mapState === "failed") {
     return (
-      <p className="font-body rounded-2xl bg-white/70 px-4 py-3 text-xs text-[#8a6b61]">
+      <p className="font-body rounded-2xl bg-white/70 px-4 py-3 text-xs text-[#806155]">
         The map couldn&rsquo;t load on this connection — just type your address and area above.
       </p>
     );
@@ -331,13 +331,13 @@ export default function LocationPicker({
       <div className="relative mt-3 overflow-hidden rounded-xl">
         <div ref={mapEl} className="h-64 w-full bg-[#f1e7e2] sm:h-72" />
         {mapState === "loading" && (
-          <p className="font-body absolute inset-0 flex items-center justify-center text-xs text-[#8a6b61]">
+          <p className="font-body absolute inset-0 flex items-center justify-center text-xs text-[#806155]">
             Loading map…
           </p>
         )}
       </div>
 
-      <p className="font-body mt-2 text-xs text-[#8a6b61]">
+      <p className="font-body mt-2 text-xs text-[#806155]">
         {message ??
           (value
             ? "Pin set — drag it or tap the map to adjust."

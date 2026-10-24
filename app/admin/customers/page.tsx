@@ -96,7 +96,7 @@ export default async function AdminCustomersPage({
       ) : (
         <div className="mt-6 overflow-x-auto rounded-2xl border border-[#3a241f]/10 bg-white">
           <table className="font-body w-full min-w-[760px] text-left text-sm">
-            <thead className="border-b border-[#3a241f]/10 text-xs uppercase tracking-wide text-[#8a6b61]">
+            <thead className="border-b border-[#3a241f]/10 text-xs uppercase tracking-wide text-[#806155]">
               <tr>
                 <th className="px-4 py-3 font-medium">Customer</th>
                 <th className="px-4 py-3 font-medium">Contact</th>
@@ -112,9 +112,9 @@ export default async function AdminCustomersPage({
                   <tr key={c.id} className="border-b border-[#3a241f]/5 last:border-0">
                     <td className="px-4 py-3">
                       <p className="font-medium text-[#3a241f]">
-                        {c.full_name || <span className="text-[#8a6b61]">No name yet</span>}
+                        {c.full_name || <span className="text-[#806155]">No name yet</span>}
                       </p>
-                      <p className="text-xs text-[#8a6b61]">
+                      <p className="text-xs text-[#806155]">
                         Joined {new Date(c.created_at).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}
                       </p>
                     </td>
@@ -129,7 +129,7 @@ export default async function AdminCustomersPage({
                           {c.phone}
                         </a>
                       ) : (
-                        <span className="block text-xs text-[#8a6b61]">No phone</span>
+                        <span className="block text-xs text-[#806155]">No phone</span>
                       )}
                     </td>
                     <td className="px-4 py-3 text-[#3a241f]">
@@ -144,17 +144,17 @@ export default async function AdminCustomersPage({
                       {c.last_visit_at ? (
                         <>
                           {new Date(c.last_visit_at).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}
-                          <span className="block text-xs text-[#8a6b61]">{daysSince(c.last_visit_at)} days ago</span>
+                          <span className="block text-xs text-[#806155]">{daysSince(c.last_visit_at)} days ago</span>
                         </>
                       ) : (
-                        <span className="text-xs text-[#8a6b61]">No completed visit</span>
+                        <span className="text-xs text-[#806155]">No completed visit</span>
                       )}
                     </td>
                     <td className="px-4 py-3">
                       {c.marketing_consent ? (
                         <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] text-emerald-700">Opted in</span>
                       ) : (
-                        <span className="rounded-full bg-stone-100 px-2 py-0.5 text-[11px] text-stone-500">Not opted in</span>
+                        <span className="rounded-full bg-stone-100 px-2 py-0.5 text-[11px] text-stone-600">Not opted in</span>
                       )}
                     </td>
                   </tr>

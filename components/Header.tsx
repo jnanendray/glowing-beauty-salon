@@ -20,7 +20,7 @@ export default function Header() {
     <header className="sticky top-0 z-40 border-b border-[#3a241f]/10 bg-[#fdf5f1]/90 backdrop-blur">
       <Container className="flex items-center justify-between py-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-[#b8765f] text-base font-bold italic text-[#fdf5f1]">
+          <span className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-[#9d5d48] text-base font-bold italic text-[#fdf5f1]">
             G
           </span>
           <span className="font-display text-lg font-semibold tracking-tight text-[#3a241f]">
@@ -42,7 +42,7 @@ export default function Header() {
 
         <div className="hidden items-center gap-5 md:flex">
           <AuthButton variant="desktop" />
-          <BookButton className="font-body rounded-full bg-[#b8765f] px-5 py-2.5 text-sm font-semibold text-[#fdf5f1] hover:bg-[#c48670] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a241f]" />
+          <BookButton className="font-body rounded-full bg-[#9d5d48] px-5 py-2.5 text-sm font-semibold text-[#fdf5f1] hover:bg-[#8a4f3d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a241f]" />
         </div>
 
         <button
@@ -82,7 +82,7 @@ export default function Header() {
             </div>
             <BookButton
               onNavigate={() => setOpen(false)}
-              className="font-body mt-2 rounded-full bg-[#b8765f] px-5 py-2.5 text-center text-sm font-semibold text-[#fdf5f1]"
+              className="font-body mt-2 rounded-full bg-[#9d5d48] px-5 py-2.5 text-center text-sm font-semibold text-[#fdf5f1]"
             />
           </Container>
         </div>

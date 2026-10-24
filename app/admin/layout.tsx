@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <header className="espresso-field">
         <Container className="flex flex-col gap-4 py-5 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
-            <span className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-[#b8765f] text-base font-bold italic text-[#fdf5f1]">
+            <span className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-[#9d5d48] text-base font-bold italic text-[#fdf5f1]">
               G
             </span>
             <div>

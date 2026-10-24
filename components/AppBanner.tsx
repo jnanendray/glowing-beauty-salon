@@ -159,7 +159,7 @@ export default function AppBanner() {
           target="_blank"
           rel="noopener noreferrer"
           className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold ${
-            isUpdate ? "bg-[#e3ab93] text-[#3a241f]" : "bg-[#b8765f] text-[#fdf5f1]"
+            isUpdate ? "bg-[#e3ab93] text-[#3a241f]" : "bg-[#9d5d48] text-[#fdf5f1]"
           }`}
         >
           {isUpdate ? "Update" : "Download"}

@@ -47,7 +47,7 @@ type StylistRow = { id: string; name: string };
 const STATUS_STYLE: Record<BookingRow["status"], { label: string; className: string }> = {
   confirmed: { label: "Confirmed", className: "bg-[#f6e3dc] text-[#8a4a37]" },
   completed: { label: "Completed", className: "bg-emerald-50 text-emerald-700" },
-  cancelled: { label: "Cancelled", className: "bg-stone-100 text-stone-500" },
+  cancelled: { label: "Cancelled", className: "bg-stone-100 text-stone-600" },
   no_show: { label: "No-show", className: "bg-amber-50 text-amber-700" },
 };
 
@@ -235,7 +235,7 @@ function MonthView({
       <div className="rounded-2xl border border-[#3a241f]/10 bg-white p-3 md:p-4">
         <div className="grid grid-cols-7 gap-1 pb-2">
           {WEEKDAYS.map((d) => (
-            <p key={d} className="font-body text-center text-[11px] font-semibold uppercase tracking-wide text-[#8a6b61]">
+            <p key={d} className="font-body text-center text-[11px] font-semibold uppercase tracking-wide text-[#806155]">
               {d}
             </p>
           ))}
@@ -251,7 +251,7 @@ function MonthView({
             let tone = "bg-white text-[#3a241f] hover:bg-[#fdf5f1]";
             if (count > 0) tone = "bg-stone-200 text-stone-600 hover:bg-stone-300";
             if (!inMonth) tone += " opacity-40";
-            else if (isPast && count === 0) tone += " text-[#8a6b61]";
+            else if (isPast && count === 0) tone += " text-[#806155]";
 
             return (
               <Link
@@ -263,7 +263,7 @@ function MonthView({
                   isSelected ? "border-[#b8765f] ring-2 ring-[#b8765f]/40" : isToday ? "border-[#b8765f]/60" : "border-transparent"
                 }`}
               >
-                <span className={isToday ? "font-bold text-[#b8765f]" : "font-medium"}>{Number(day.slice(8))}</span>
+                <span className={isToday ? "font-bold text-[#9d5d48]" : "font-medium"}>{Number(day.slice(8))}</span>
                 {count > 0 && (
                   <span className="mt-0.5 text-[10px] leading-tight md:text-[11px]">{count} booked</span>
                 )}
@@ -271,7 +271,7 @@ function MonthView({
             );
           })}
         </div>
-        <div className="font-body mt-3 flex flex-wrap gap-4 px-1 text-xs text-[#8a6b61]">
+        <div className="font-body mt-3 flex flex-wrap gap-4 px-1 text-xs text-[#806155]">
           <span className="flex items-center gap-1.5">
             <span className="h-3 w-3 rounded bg-stone-200" /> Has bookings
           </span>
@@ -286,14 +286,14 @@ function MonthView({
           <h2 className="font-display text-lg font-semibold text-[#3a241f]">{formatDateLong(selected)}</h2>
           <Link
             href={`/admin/bookings?view=day&date=${selected}`}
-            className="font-body shrink-0 text-xs text-[#b8765f] underline-offset-2 hover:underline"
+            className="font-body shrink-0 text-xs text-[#9d5d48] underline-offset-2 hover:underline"
           >
             By stylist →
           </Link>
         </div>
         <div className="mt-3 flex flex-col gap-2">
           {dayBookings.length === 0 ? (
-            <p className="font-body rounded-2xl border border-dashed border-[#3a241f]/15 bg-white/60 p-6 text-center text-sm text-[#8a6b61]">
+            <p className="font-body rounded-2xl border border-dashed border-[#3a241f]/15 bg-white/60 p-6 text-center text-sm text-[#806155]">
               No bookings on this day.
             </p>
           ) : (
@@ -324,8 +324,8 @@ function ListView({ bookings, today }: { bookings: BookingRow[]; today: string }
         <section key={g.date}>
           <h2 className="font-display text-base font-semibold text-[#3a241f]">
             {formatDateLong(g.date)}
-            {g.date === today && <span className="font-body ml-2 text-xs font-normal text-[#b8765f]">today</span>}
-            <span className="font-body ml-2 text-xs font-normal text-[#8a6b61]">
+            {g.date === today && <span className="font-body ml-2 text-xs font-normal text-[#9d5d48]">today</span>}
+            <span className="font-body ml-2 text-xs font-normal text-[#806155]">
               {g.items.length} booking{g.items.length === 1 ? "" : "s"}
             </span>
           </h2>
@@ -366,13 +366,13 @@ function DayView({ bookings, stylists }: { bookings: BookingRow[]; stylists: Sty
             <section key={stylist.id} className="rounded-2xl border border-[#3a241f]/10 bg-white/70 p-3">
               <h2 className="font-display px-1 pb-2 text-base font-semibold text-[#3a241f]">
                 {stylist.name}
-                <span className="font-body ml-2 text-xs font-normal text-[#8a6b61]">
+                <span className="font-body ml-2 text-xs font-normal text-[#806155]">
                   {own.length} booking{own.length === 1 ? "" : "s"}
                 </span>
               </h2>
               <div className="flex flex-col gap-2">
                 {own.length === 0 ? (
-                  <p className="font-body px-1 py-4 text-xs text-[#8a6b61]">Free all day</p>
+                  <p className="font-body px-1 py-4 text-xs text-[#806155]">Free all day</p>
                 ) : (
                   own.map((b) => <BookingCard key={b.id} booking={b} showStylist={false} />)
                 )}
@@ -407,11 +407,11 @@ function WeekView({ bookings, start, today }: { bookings: BookingRow[]; start: s
                 className="font-body block px-1 pb-2 text-sm font-semibold text-[#3a241f] hover:underline"
               >
                 {formatDateShort(day)}
-                {isToday && <span className="ml-1.5 text-xs font-normal text-[#b8765f]">today</span>}
+                {isToday && <span className="ml-1.5 text-xs font-normal text-[#9d5d48]">today</span>}
               </Link>
               <div className="flex flex-col gap-2">
                 {own.length === 0 ? (
-                  <p className="font-body px-1 py-3 text-xs text-[#8a6b61]">—</p>
+                  <p className="font-body px-1 py-3 text-xs text-[#806155]">—</p>
                 ) : (
                   own.map((b) => <BookingCard key={b.id} booking={b} showStylist compact />)
                 )}
@@ -444,7 +444,7 @@ function BookingCard({
       <div className="flex items-start justify-between gap-2">
         <p className="font-body text-sm font-semibold text-[#3a241f]">
           {formatClock(b.start_time)}
-          {!compact && <span className="font-normal text-[#8a6b61]"> – {formatClock(b.end_time)}</span>}
+          {!compact && <span className="font-normal text-[#806155]"> – {formatClock(b.end_time)}</span>}
         </p>
         <span className={`font-body shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${status.className}`}>
           {status.label}
@@ -482,7 +482,7 @@ function BookingCard({
       )}
 
       {!compact && b.notes && (
-        <p className="font-body mt-1.5 text-xs italic text-[#8a6b61]">&ldquo;{b.notes}&rdquo;</p>
+        <p className="font-body mt-1.5 text-xs italic text-[#806155]">&ldquo;{b.notes}&rdquo;</p>
       )}
 
       {b.status === "confirmed" && (
@@ -515,7 +515,7 @@ function StatusButton({
         type="submit"
         className={`font-body rounded-full px-2.5 py-1 text-[11px] font-semibold ${
           tone === "primary"
-            ? "bg-[#b8765f] text-[#fdf5f1] hover:bg-[#c48670]"
+            ? "bg-[#9d5d48] text-[#fdf5f1] hover:bg-[#8a4f3d]"
             : "border border-[#3a241f]/15 text-[#5c4038] hover:bg-[#fdf5f1]"
         }`}
       >

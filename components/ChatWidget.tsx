@@ -242,7 +242,7 @@ export default function ChatWidget() {
                   <button
                     type="submit"
                     disabled={sending || !draft.trim()}
-                    className="font-body h-[42px] rounded-full bg-[#b8765f] px-4 text-sm font-semibold text-[#fdf5f1] disabled:opacity-50"
+                    className="font-body h-[42px] rounded-full bg-[#9d5d48] px-4 text-sm font-semibold text-[#fdf5f1] disabled:opacity-50"
                   >
                     {sending ? "…" : "Send"}
                   </button>
@@ -259,7 +259,7 @@ export default function ChatWidget() {
               {who.kind === "signed-out" && (
                 <Link
                   href={`/login?next=${encodeURIComponent(pathname || "/")}`}
-                  className="font-body rounded-full bg-[#b8765f] px-5 py-2.5 text-sm font-semibold text-[#fdf5f1]"
+                  className="font-body rounded-full bg-[#9d5d48] px-5 py-2.5 text-sm font-semibold text-[#fdf5f1]"
                 >
                   Sign in to chat
                 </Link>
@@ -273,12 +273,12 @@ export default function ChatWidget() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="font-body fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-[#b8765f] px-5 py-3 text-sm font-semibold text-[#fdf5f1] shadow-[0_10px_30px_rgba(58,36,31,0.35)] hover:bg-[#c48670]"
+        className="font-body fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-[#9d5d48] px-5 py-3 text-sm font-semibold text-[#fdf5f1] shadow-[0_10px_30px_rgba(58,36,31,0.35)] hover:bg-[#8a4f3d]"
       >
         <ChatIcon />
         {open ? "Close" : "Chat with us"}
         {!open && unread > 0 && (
-          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#fdf5f1] px-1.5 text-[11px] font-bold text-[#b8765f]">
+          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#fdf5f1] px-1.5 text-[11px] font-bold text-[#9d5d48]">
             {unread}
           </span>
         )}
@@ -292,12 +292,12 @@ function Bubble({ mine, time, children }: { mine: boolean; time?: string; childr
     <div className={`flex flex-col ${mine ? "items-end" : "items-start"}`}>
       <div
         className={`font-body max-w-[85%] whitespace-pre-wrap break-words rounded-2xl px-3.5 py-2 text-sm ${
-          mine ? "rounded-br-md bg-[#b8765f] text-[#fdf5f1]" : "rounded-bl-md bg-white text-[#3a241f] shadow-sm"
+          mine ? "rounded-br-md bg-[#9d5d48] text-[#fdf5f1]" : "rounded-bl-md bg-white text-[#3a241f] shadow-sm"
         }`}
       >
         {children}
       </div>
-      {time && <span className="font-body mt-0.5 px-1 text-[10px] text-[#8a6b61]">{time}</span>}
+      {time && <span className="font-body mt-0.5 px-1 text-[10px] text-[#806155]">{time}</span>}
     </div>
   );
 }
