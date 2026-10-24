@@ -121,7 +121,7 @@ jobs:
           fi
           # Each build gets a higher version number so phones accept it as an update.
           jq --argjson code "${{ github.run_number }}" --arg name "$VERSION_NAME" \
-            '.appVersionCode = $code | .appVersionName = $name | .appVersion = ($code | tostring)' \
+            '.appVersionCode = $code | .appVersionName = $name | .appVersion = ($code | tostring) | .startUrl = ("/?app_v=" + ($code | tostring))' \
             twa-manifest.json > twa.tmp && mv twa.tmp twa-manifest.json
           if ! bubblewrap update --skipVersionUpgrade --manifest=./twa-manifest.json < /dev/null 2>&1 | tee update.log; then
             msg=$(tail -n 60 update.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')
@@ -166,4 +166,4 @@ jobs:
           gh release create "android-$VERSION_NAME" "GlowingBeautySalon-$VERSION_NAME.apk" \
             --title "Android app $VERSION_NAME" \
             --latest \
-            --notes "Open this page on an Android phone, tap the .apk file below to download it, then open it to install. You may need to allow installs from your browser the first time (Android asks automatically)."
+            --notes "Open this page on an Android phone, tap the .apk file below to download it, then open it to install. If the app is already installed, this replaces it (you stay signed in). You may need to allow installs from your browser the first time (Android asks automatically). Apps from now on show an Update button by themselves when a new version is out."

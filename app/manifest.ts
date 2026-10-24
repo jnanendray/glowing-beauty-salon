@@ -11,7 +11,10 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Book hair, skin, spa and bridal appointments — in-studio or at your doorstep.",
     start_url: "/",
     scope: "/",
-    display: "standalone",
+    // "browser" on purpose: our real Android app is the installable
+    // version. "standalone" made Chrome offer its own "Install app",
+    // which put a second, separate copy on people's phones.
+    display: "browser",
     orientation: "portrait",
     background_color: "#fdf5f1",
     theme_color: "#b8765f",

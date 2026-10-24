@@ -11,6 +11,7 @@ import {
   formatMessageTime,
   upsertMessage,
 } from "@/lib/chat";
+import { useViewer } from "@/lib/viewer";
 
 type Who =
   | { kind: "loading" }
@@ -37,46 +38,42 @@ export default function ChatWidget() {
 
   const customerId = who.kind === "customer" ? who.customerId : null;
 
-  // Work out who's looking: signed out / admin / customer.
+  // Work out who's looking (shared viewer state), then find the
+  // customer's profile row once per signed-in user.
+  const viewer = useViewer();
+  const viewerUserId = viewer.status === "signed-in" ? viewer.user.id : null;
+  const viewerIsAdmin = viewer.status === "signed-in" && viewer.isAdmin;
+
   useEffect(() => {
-    const supabase = createClient();
-    let cancelled = false;
-
-    async function resolve(userId: string | null) {
-      if (!userId) {
-        if (!cancelled) setWho({ kind: "signed-out" });
-        return;
-      }
-      const { data: isAdmin } = await supabase.rpc("is_admin");
-      if (cancelled) return;
-      if (isAdmin === true) {
-        setWho({ kind: "admin" });
-        return;
-      }
-      const { data } = await supabase
-        .from("customers")
-        .select("id, full_name")
-        .eq("auth_user_id", userId)
-        .maybeSingle();
-      if (cancelled) return;
-      const row = data as { id: string; full_name: string | null } | null;
-      setWho(
-        row
-          ? { kind: "customer", customerId: row.id, firstName: row.full_name?.split(" ")[0] ?? null }
-          : { kind: "no-profile" }
-      );
+    if (viewer.status === "loading") return;
+    if (viewer.status === "signed-out" || !viewerUserId) {
+      setWho({ kind: "signed-out" });
+      return;
     }
-
-    supabase.auth.getUser().then(({ data }) => resolve(data.user?.id ?? null));
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" || event === "SIGNED_OUT") resolve(session?.user?.id ?? null);
-    });
-
+    if (viewerIsAdmin) {
+      setWho({ kind: "admin" });
+      return;
+    }
+    let cancelled = false;
+    const supabase = createClient();
+    supabase
+      .from("customers")
+      .select("id, full_name")
+      .eq("auth_user_id", viewerUserId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (cancelled) return;
+        const row = data as { id: string; full_name: string | null } | null;
+        setWho(
+          row
+            ? { kind: "customer", customerId: row.id, firstName: row.full_name?.split(" ")[0] ?? null }
+            : { kind: "no-profile" }
+        );
+      });
     return () => {
       cancelled = true;
-      listener.subscription.unsubscribe();
     };
-  }, []);
+  }, [viewer.status, viewerUserId, viewerIsAdmin]);
 
   // Load the conversation and keep it live.
   useEffect(() => {

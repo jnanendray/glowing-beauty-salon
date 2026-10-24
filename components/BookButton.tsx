@@ -1,18 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+import { useViewer } from "@/lib/viewer";
 
 /**
- * "Book an appointment" needs a signed-in customer, so it checks
- * session state first: signed out → /login (remembering /book as
- * where to return to once signed in); signed in → straight to the
+ * "Book an appointment" needs a signed-in customer: signed out → /login
+ * (remembering /book as where to return); signed in → straight to the
  * booking page, with the service preselected when one is given.
  *
- * The salon owner/staff (admins) don't book for themselves — for them
- * the same button becomes "View bookings" and opens the admin
- * calendar instead.
+ * Salon staff (admins) don't book for themselves — for them the same
+ * button becomes "View bookings" and opens the admin calendar.
  */
 export default function BookButton({
   className,
@@ -26,42 +23,9 @@ export default function BookButton({
   presetService?: string;
   children?: React.ReactNode;
 }) {
-  const [signedIn, setSignedIn] = useState<boolean | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const viewer = useViewer();
 
-  useEffect(() => {
-    const supabase = createClient();
-    let cancelled = false;
-
-    function checkAdmin(hasUser: boolean) {
-      if (!hasUser) {
-        setIsAdmin(false);
-        return;
-      }
-      supabase.rpc("is_admin").then(({ data }) => {
-        if (!cancelled) setIsAdmin(data === true);
-      });
-    }
-
-    supabase.auth.getUser().then(({ data }) => {
-      const hasUser = !!data.user;
-      setSignedIn(hasUser);
-      checkAdmin(hasUser);
-    });
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      const hasUser = !!session?.user;
-      setSignedIn(hasUser);
-      checkAdmin(hasUser);
-    });
-
-    return () => {
-      cancelled = true;
-      listener.subscription.unsubscribe();
-    };
-  }, []);
-
-  if (isAdmin) {
+  if (viewer.status === "signed-in" && viewer.isAdmin) {
     return (
       <Link href="/admin/bookings?view=month" onClick={onNavigate} className={className}>
         View bookings
@@ -70,7 +34,7 @@ export default function BookButton({
   }
 
   const bookPath = presetService ? `/book?service=${encodeURIComponent(presetService)}` : "/book";
-  const href = signedIn ? bookPath : `/login?next=${encodeURIComponent(bookPath)}`;
+  const href = viewer.status === "signed-in" ? bookPath : `/login?next=${encodeURIComponent(bookPath)}`;
 
   return (
     <Link href={href} onClick={onNavigate} className={className}>
