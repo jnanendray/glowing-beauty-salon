@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import ChatWidget from "@/components/ChatWidget";
+import AppBanner from "@/components/AppBanner";
 
 // Fonts are bundled with the site (app/fonts) instead of fetched from
 // Google Fonts during every build, so a Google hiccup can't break a
@@ -40,9 +41,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Start connecting to Supabase early — sign-in, booking and chat all talk to it. */}
+        {process.env.NEXT_PUBLIC_SUPABASE_URL && (
+          <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} crossOrigin="" />
+        )}
+      </head>
       <body
         className={`${playfair.variable} ${inter.variable} bg-[#fdf5f1] text-[#3a241f] antialiased`}
       >
+        <AppBanner />
         {children}
         <ChatWidget />
       </body>

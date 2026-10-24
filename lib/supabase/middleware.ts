@@ -9,6 +9,15 @@ type CookieToSet = { name: string; value: string; options: CookieOptions };
  * Server Components even while their browser cookie looks valid.
  */
 export async function updateSession(request: NextRequest) {
+  // Visitors who aren't signed in have no session to refresh — skip the
+  // round-trip to Supabase so their pages load faster.
+  const hasSession = request.cookies
+    .getAll()
+    .some((c) => c.name.startsWith("sb-") && c.name.includes("-auth-token"));
+  if (!hasSession) {
+    return NextResponse.next({ request });
+  }
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
