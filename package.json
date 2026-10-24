@@ -25,5 +25,13 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.9",
     "@eslint/eslintrc": "^3"
-  }
+  },
+  "browserslist": [
+    "chrome >= 109",
+    "edge >= 109",
+    "firefox >= 115",
+    "safari >= 16",
+    "ios_saf >= 16",
+    "samsung >= 21"
+  ]
 }

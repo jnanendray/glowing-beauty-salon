@@ -23,6 +23,16 @@ const inter = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://glowing-beauty-salon.vercel.app"),
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: "Glowing Beauty Salon",
+    title: "Glowing Beauty Salon | Premium Hair, Skin & Bridal Studio",
+    description:
+      "Book hair, skin, spa and bridal appointments — in-studio or at your doorstep. Choose your stylist, pick a slot, and glow.",
+    images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
+  },
   title: "Glowing Beauty Salon | Premium Hair, Skin & Bridal Studio",
   description:
     "Book hair, skin, spa and bridal appointments at Glowing Beauty Salon — in-studio or at your doorstep. Choose your stylist, pick a slot, and glow.",
@@ -42,9 +52,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Start connecting to Supabase early — sign-in, booking and chat all talk to it. */}
+        {/* Look up Supabase's address early (cheap). Signed-out visitors may never
+            call it, so a full preconnect would be wasted for them. */}
         {process.env.NEXT_PUBLIC_SUPABASE_URL && (
-          <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} crossOrigin="" />
+          <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
         )}
       </head>
       <body
