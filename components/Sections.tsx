@@ -116,6 +116,7 @@ export function Hero() {
                 alt="Elegant braided bridal updo with baby's breath flowers at Glowing Beauty Salon"
                 width={480}
                 height={640}
+                sizes="(min-width: 1024px) 22vw, 46vw"
                 className="h-full w-full object-cover"
                 priority
               />
@@ -128,6 +129,7 @@ export function Hero() {
                 alt="Client receiving a relaxing facial treatment"
                 width={420}
                 height={420}
+                sizes="(min-width: 1024px) 22vw, 46vw"
                 className="h-full w-full object-cover"
               />
             </div>
@@ -137,6 +139,7 @@ export function Hero() {
                 alt="Bridal makeup being applied by a makeup artist"
                 width={420}
                 height={520}
+                sizes="(min-width: 1024px) 22vw, 46vw"
                 className="h-full w-full object-cover"
               />
             </div>
@@ -174,7 +177,8 @@ export function Services() {
                   alt={s.name}
                   width={480}
                   height={360}
-                  className="h-full w-full object-cover"
+                  sizes="(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw"
+                className="h-full w-full object-cover"
                 />
               </div>
               <div className="p-5">
@@ -183,7 +187,7 @@ export function Services() {
                     {s.name}
                   </h3>
                   {s.home && (
-                    <span className="font-body shrink-0 rounded-full bg-[#f1d9cf] px-2.5 py-1 text-[11px] font-semibold text-[#9a5a46]">
+                    <span className="font-body shrink-0 rounded-full bg-[#f1d9cf] px-2.5 py-1 text-[11px] font-semibold text-[#7f4434]">
                       At-home available
                     </span>
                   )}
@@ -277,7 +281,8 @@ export function Stylists() {
                   alt={person.name}
                   width={360}
                   height={360}
-                  className="h-full w-full object-cover"
+                  sizes="(min-width: 640px) 300px, 92vw"
+                className="h-full w-full object-cover"
                 />
               </div>
               <h3 className="font-display mt-4 text-base font-semibold text-[#3a241f]">

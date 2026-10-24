@@ -17,6 +17,13 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Serve photos as AVIF/WebP (smaller) when the browser supports it.
+  images: { formats: ["image/avif", "image/webp"] },
+  experimental: {
+    // Put the (small) stylesheet straight into the page so the first
+    // paint doesn't wait for a separate CSS download.
+    inlineCss: true,
+  },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

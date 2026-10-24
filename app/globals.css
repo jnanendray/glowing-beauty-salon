@@ -116,7 +116,7 @@ body {
 
 .wordmark-fill {
   position: relative;
-  background-image: url("/brand/rose-gold-texture.jpg");
+  background-image: url("/brand/rose-gold-texture.webp");
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
